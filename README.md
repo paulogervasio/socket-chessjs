@@ -8,7 +8,7 @@ TODO
  - Docker file to deploy
  - Design UI
  - Storage for matches
-
+ - Tests / front and backend
 
 
 ## How to install
