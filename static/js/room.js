@@ -132,7 +132,7 @@ function configSocket(){
 
             var _id = clientList[i];
 
-            userId = removeInvalidIdChars(_id);
+            var userId = removeInvalidIdChars(_id);
             //
             var option = '<div id="'+ userId +'">' + userId + '</div>';
             //var selectedOption = '<div id="room' + (i+1) +'">';

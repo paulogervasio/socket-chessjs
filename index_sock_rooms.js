@@ -43,6 +43,10 @@ app.use('/static', express.static(__dirname + '/static'));
 var allUsers = [];
 var allRooms = [];
 
+var RoomManager = require('./roomManager.js');
+
+var roomManager = new RoomManager(io);
+
 
 // replaced by dictionary room
 //var playerA = null;
@@ -97,12 +101,10 @@ function defineBoardSeats(_socket, _roomId, _flagRoom){
 
 }
 
-function joinRoom(){
-
-}
 
 io.on('connection', function(socket){
 
+      
       console.log('connected');
 
       //console.log('userName:' + _userName + ' connected');
@@ -124,54 +126,9 @@ io.on('connection', function(socket){
 
       socket.broadcast.emit('newUserAdded', {userId:socket.id,roomId:'mainRoom'});
       socket.on('join', function(_socketData){
-
-        console.log('join');
-
-        //console.log('joined');
-
-        console.log(_socketData.userName, _socketData.roomName);
-
-        var users = [];
-        var rooms = [];
-
-        var allConnectedRooms=[];
-
-        var ns = io.of("/"); 
-
-        console.log('all users connected');
-        for (var id in ns.connected) {
-          console.log(id);
-          //console.log("roomName:" + ns.connected[id].rooms[1]);
-          users.push(id);
-          //console.log('room id:');
-          //console.log(ns.connected[id].rooms);
-
-          
-          for (var roomByUserId in ns.connected[id].rooms) {
-              
-              //console.log('roomByUserId ==============================');
-              //console.log(ns.connected[id].rooms[roomByUserId]);
-
-              var roomStr = ns.connected[id].rooms[roomByUserId]; 
-              var n = roomStr.search("room_");
-              if(n == 0){
-                //console.log('add to allConnectedRooms =++++++++++++++++++++++++++');
-                //console.log(roomStr);
-                allConnectedRooms[roomStr] = true;
-              }
-          }
-
-        }
-
-        //console.log('ALL CONNECTED ROOMS ***********************************');
-        rooms = Object.keys(allConnectedRooms);
-
-        //console.log('io.sockets.adapter.rooms');
-        // console.log(io.sockets.adapter.rooms);
-
-        //console.log('send clientList');
-        socket.emit('clientList', {users: users, userId: socket.id, rooms:rooms});
-      });
+        roomManager.joinRoom(_socketData, socket);
+      }
+);
      
 
 
