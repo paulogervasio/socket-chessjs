@@ -183,11 +183,19 @@ io.on('connection', function(socket){
     var userId =  _userData.userId;
     var roomId =  _userData.roomId;
 
+    var playerA = allRooms[roomId].playerA;
+    var playerB = allRooms[roomId].playerB;
+    var guests = allRooms[roomId].guests;
+
+    playerB == null? playerB = userId: allRooms[roomId].playerB;
+
+    var roomUsersData = {playerA:playerA, playerB:playerB, guests:guests};
+
     var socket = io.sockets.connected[userId];
     var socketOwnerRoom = io.sockets.connected[_userData.roomId.replace('room_','')];
 
-    socket.broadcast.emit('userJoinRoom', {userId:socket.id});
-    socketOwnerRoom.emit('startGame', {gameStarted:true});
+    io.sockets.emit('userJoinRoom', {userId:socket.id, roomUsersData:roomUsersData});
+    socketOwnerRoom.emit('startGame', {gameStarted:true, roomUsersData:roomUsersData});
 
     console.log(socket.id);
     defineBoardSeats(socket, roomId, 'joinRoom');

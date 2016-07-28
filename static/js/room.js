@@ -36,15 +36,15 @@ var myUserId;
 var currentRoom = 'mainRoom';
 var roomName = 'myRoomName';
 
-
-
-
+var playerA;
+var playerB;
+var guests = [];
 
 var socket = null;
 
 function configSocket(){
 
-     socket = io();        
+    socket = io();        
 
     chatInitalized = true;
 
@@ -158,6 +158,9 @@ function configSocket(){
 
       $('#chatCredentials').hide();
       $('#mainRoom').hide();
+
+      console.log('BOARD CONFIG');
+      console.log(_boardData);
         
 
       currentRoom = 'room_' + _boardData.userId;
@@ -253,14 +256,27 @@ function addNewRoom(_roomData){
 
 }
 
+
 function userJoinRoom(_userData){
-  $('#mainRoom').find("#allConnectedUsers").find("#" + removeInvalidIdChars(_userData.userId)).remove(); 
+
+  console.log('userJoinRoom');
+  console.log(_userData);
+
+  // remove user from main room
+  var userId = removeInvalidIdChars(_userData.userId);
+  $('#mainRoom').find("#allConnectedUsers").find("#" + userId).remove(); 
+
+  /*// TODO - add user to joined room list
+  var option = '<div id="'+ userId +'">' + userId + '</div>';
+  $('#userContainer').find("#usersBox").append(option); 
+  */
+
 }
 
 
 function addNewUser(_userData){
 
-  console.log('addNewUser');
+  console.log('addNewUser | remove user???');
 
   console.log(_userData);
   console.log(currentRoom);
@@ -270,9 +286,7 @@ function addNewUser(_userData){
 
   userId = removeInvalidIdChars(userId);
 
-
   console.log(userRoom +'=='+ currentRoom);
-
 
   //alert(currentRoom);
 
@@ -281,8 +295,9 @@ function addNewUser(_userData){
   if(userRoom == 'mainRoom'){
     $('#mainRoom').find("#allConnectedUsers").append(option);
   }else{
-  //if(userRoom == currentRoom){
+    console.log('add user ' + userId + ' to userbox');
     $('#userContainer').find("#usersBox").append(option);
+
   }
 
 }
@@ -338,8 +353,12 @@ function initGame(_boardData){
 
   });
 }
-function startChessGame(_statusGame){
+function startChessGame(_gameData){
   //alert('Start chess game: ' + _statusGame);
+
+  console.log('Starting Game ##############################');
+  console.log(_gameData);
+
   var $f = $("#gameContainer");
   $f.get(0).contentWindow.startChessGame();
 
