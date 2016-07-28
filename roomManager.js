@@ -28,11 +28,17 @@
 var method = RoomManager.prototype;
 
 
-function RoomManager(io){
+function RoomManager(io, chessBoard, allRooms){
 	this.io = io;
+  this.chessBoard = chessBoard;
+  this.allRooms = allRooms;
 }
+
 method.joinRoom = function (_socketData, socket) {
+
     console.log('************ Joined!!');
+
+    console.log(this.allRooms);
     console.log('join');
 
     //console.log('joined');
@@ -83,6 +89,61 @@ method.joinRoom = function (_socketData, socket) {
   
 
 };
+method.changeRoom = function (_userData) {
+
+    var userId =  _userData.userId;
+    var roomId =  _userData.roomId;
+
+    var playerA = this.allRooms[roomId].playerA;
+    var playerB = this.allRooms[roomId].playerB;
+    var guests = null;
+
+    playerB == null? playerB = userId: this.allRooms[roomId].playerB;
+
+    var roomUsersData = {playerA:playerA, playerB:playerB, guests:guests};
+
+    var socket = this.io.sockets.connected[userId];
+    var socketOwnerRoom = this.io.sockets.connected[_userData.roomId.replace('room_','')];
+
+    this.io.sockets.emit('userJoinRoom', {userId:socket.id, roomUsersData:roomUsersData});
+    socketOwnerRoom.emit('startGame', {gameStarted:true, roomUsersData:roomUsersData});
+
+    console.log('----------------#####################----------------------');
+    console.log(this.allRooms);
+    console.log(this.chessBoard);
+    this.chessBoard.defineBoardSeats(socket, roomId, 'joinRoom', this.allRooms);	
+};
+
+method.createRoom = function (_userData) {
+
+    var socket = this.io.sockets.connected[_userData.userId];
+
+    var _roomId = _userData.roomId;
+    var _playerA = _userData.userId;
+
+    console.log('createRoom:' + _userData.roomId);
+
+    
+    socket.join(_roomId);
+
+    this.allRooms[_roomId] = {playerA:_playerA, playerB:null, guests:null};
+
+
+    console.log("_roomId: " + _roomId);
+    console.log("playerA: " + this.allRooms[_roomId].playerA);
+
+    console.log(this.allRooms);
+
+    console.log("_userData");
+    console.log(_userData);
+
+    this.chessBoard.defineBoardSeats(socket, _roomId, 'createRoom', this.allRooms);
+
+    console.log('newRoomAdded');
+    socket.broadcast.emit('newRoomAdded', {roomId: _roomId, userIdOwner: _playerA});
+ 
+};
+
 
 module.exports = RoomManager;
 

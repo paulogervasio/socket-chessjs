@@ -44,8 +44,10 @@ var allUsers = [];
 var allRooms = [];
 
 var RoomManager = require('./roomManager.js');
+var ChessBoard = require('./chessBoard.js');
 
-var roomManager = new RoomManager(io);
+var chessBoard = new ChessBoard();
+var roomManager = new RoomManager(io, chessBoard, allRooms);
 
 
 // replaced by dictionary room
@@ -62,73 +64,33 @@ app.get('/chessboard', function(req, res){
 });
 
 
-/**
-* asdsa
-*/
-function defineBoardSeats(_socket, _roomId, _flagRoom){
-
-  var socketRoomId = _roomId;
-
-  var playerA = allRooms[socketRoomId].playerA;
-  var playerB = allRooms[socketRoomId].playerB;
-
-  _socket.join(socketRoomId);
-  _socket.room = socketRoomId;
-
-  console.log('defineBoardSeats');
-  console.log(_socket.room);
-
-  console.log(playerA);
-
-  if(_flagRoom == 'createRoom'){
-    console.log('PlayerA is ' + _socket.id);
-    _socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'A'});
-
-  } else{
-    // joinRoom
-    if(playerB == null){
-      // player B joined in room
-      console.log('PlayerB is ' + _socket.id);
-      allRooms[socketRoomId].playerB=_socket;
-      _socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'B'});
-    }else{
-      // GUESTS
-      console.log('GUEST');
-      _socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'GUEST'});
-    }
-
-  }
-
-}
-
-
 io.on('connection', function(socket){
 
       
-      console.log('connected');
+  console.log('connected');
 
-      //console.log('userName:' + _userName + ' connected');
-      console.log('session id:' + socket.id);
+  //console.log('userName:' + _userName + ' connected');
+  console.log('session id:' + socket.id);
 
-      //console.log('room_' + socket.id.toString());
+  //console.log('room_' + socket.id.toString());
 
-      socket.join('mainRoom');
-      socket.room = 'mainRoom';
+  socket.join('mainRoom');
+  socket.room = 'mainRoom';
 
-      // AFTER SELECT THE ROOM
-      //defineBoardSeats(socket);
-      
-      allUsers.push(socket);
+  // AFTER SELECT THE ROOM
+  //defineBoardSeats(socket);
+  
+  allUsers.push(socket);
 
 
-      console.log('newUserAdded');
-      console.log(socket.room);
+  console.log('newUserAdded');
+  console.log(socket.room);
 
-      socket.broadcast.emit('newUserAdded', {userId:socket.id,roomId:'mainRoom'});
-      socket.on('join', function(_socketData){
-        roomManager.joinRoom(_socketData, socket);
-      }
-);
+  socket.broadcast.emit('newUserAdded', {userId:socket.id,roomId:'mainRoom'});
+  socket.on('join', function(_socketData){
+      roomManager.joinRoom(_socketData, socket);
+    }
+  );
      
 
 
@@ -147,66 +109,16 @@ io.on('connection', function(socket){
   });
 
   socket.on('createRoom', function(_userData){
-    //io.emit('recei', msg);
-
-    var _roomId = _userData.roomId;
-    var _playerA = _userData.userId;
-
-    console.log('createRoom:' + _userData.roomId);
-    socket.join(_roomId);
-
-    allRooms[_roomId] = {playerA:_playerA, playerB:null, guests:null};
-
-
-    console.log("_roomId: " + _roomId);
-    console.log("playerA: " + allRooms[_roomId].playerA);
-
-    console.log(allRooms);
-
-    console.log("_userData");
-    console.log(_userData);
-
-    defineBoardSeats(socket, _roomId, 'createRoom');
-
-    console.log('newRoomAdded');
-    socket.broadcast.emit('newRoomAdded', {roomId: _roomId, userIdOwner: _playerA});
-    
-
-
-
+    roomManager.createRoom(_userData);
   });
 
   socket.on('changeRoom', function(_userData){
-
     console.log('changeRoom');
-
-    var userId =  _userData.userId;
-    var roomId =  _userData.roomId;
-
-    var playerA = allRooms[roomId].playerA;
-    var playerB = allRooms[roomId].playerB;
-    var guests = allRooms[roomId].guests;
-
-    playerB == null? playerB = userId: allRooms[roomId].playerB;
-
-    var roomUsersData = {playerA:playerA, playerB:playerB, guests:guests};
-
-    var socket = io.sockets.connected[userId];
-    var socketOwnerRoom = io.sockets.connected[_userData.roomId.replace('room_','')];
-
-    io.sockets.emit('userJoinRoom', {userId:socket.id, roomUsersData:roomUsersData});
-    socketOwnerRoom.emit('startGame', {gameStarted:true, roomUsersData:roomUsersData});
-
-    console.log(socket.id);
-    defineBoardSeats(socket, roomId, 'joinRoom');
-
-    ////////////////////////////////////////////////
-
+    roomManager.changeRoom(_userData);
   });
 
 
   socket.on('chat message', function(msg){
-
     console.log(socket.room);
     socket.broadcast.emit('chat message', msg);
 
@@ -222,15 +134,12 @@ io.on('connection', function(socket){
 
   });
 
-    socket.once('disconnect', function (_user) {
+  socket.once('disconnect', function (_user) {
+     console.log('DISCONECTED');
+     console.log(socket.room);
 
 
-       console.log('DISCONECTED');
-
-       console.log(socket.room);
-
-
-    });  
+  });  
 
 
 });

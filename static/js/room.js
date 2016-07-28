@@ -199,30 +199,11 @@ function initApp(){
 
 }
 
-function removeUser(_userData){
 
-
-  console.log('Here');
-  //console.log(_userData);
-  var userId = _userData.userId;
-  var roomId = _userData.roomId;
-
-  userId = removeInvalidIdChars(userId);
-  roomId = removeInvalidIdChars(roomId);
-  // remove invalid chars
-
-  if(currentRoom == 'mainRoom'){
-
-    $("#mainRoom").find("#allConnectedUsers").find("#" + userId).remove();
-    $("#mainRoom").find("#allConnectedRooms").find("#" + roomId).remove();
-  }
-  if(currentRoom == roomId){
-    $('#userContainer').find("#usersBox").find(userId).remove();  
-  }
-
-}
 
 function removeInvalidIdChars(_name){
+
+  console.log(_name);
 
   _name = _name.replace('/','');
   _name = _name.replace('#','');
@@ -262,6 +243,11 @@ function userJoinRoom(_userData){
   console.log('userJoinRoom');
   console.log(_userData);
 
+  playerA = _userData.roomUsersData.playerA;
+  playerB = _userData.roomUsersData.playerB;
+
+  console.log(playerA);
+
   // remove user from main room
   var userId = removeInvalidIdChars(_userData.userId);
   $('#mainRoom').find("#allConnectedUsers").find("#" + userId).remove(); 
@@ -273,7 +259,9 @@ function userJoinRoom(_userData){
 
 }
 
-
+/**
+  Add new user both main room and game rooms
+*/
 function addNewUser(_userData){
 
   console.log('addNewUser | remove user???');
@@ -299,6 +287,46 @@ function addNewUser(_userData){
     $('#userContainer').find("#usersBox").append(option);
 
   }
+}
+
+function removeUser(_userData){
+
+  console.log('removeUser');
+  console.log(_userData);
+
+  var userId = _userData.userId;
+  var roomId = _userData.roomId;
+
+  userId = removeInvalidIdChars(userId);
+  roomId = removeInvalidIdChars(roomId);
+  // remove invalid chars
+
+  console.log(userId);
+  console.log(roomId);
+
+  if(currentRoom == 'mainRoom'){
+
+    $("#mainRoom").find("#allConnectedUsers").find("#" + userId).remove();
+    $("#mainRoom").find("#allConnectedRooms").find("#" + roomId).remove();
+  }
+
+  console.log(currentRoom + '==' + roomId);
+  if(currentRoom == roomId){
+    $('#userContainer').find("#usersBox").find(userId).remove();  
+  }
+
+
+}
+
+/**
+  Verify after a user quited is a player of the game.
+  Case its true the game is aborted.
+*/
+function verifyGamePositions(){
+  if((playerA && playerB) && userId == removeInvalidIdChars(playerA) || userId == removeInvalidIdChars(playerB)){
+     alert('A player exited. The game has not enough players to continue and will be aborted.');
+     io.emmit('end');
+  }  
 
 }
 

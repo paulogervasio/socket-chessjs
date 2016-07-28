@@ -1,0 +1,73 @@
+/*
+ * Copyright (c) 2016, Paulo Gervasio (pgervasiosousa@gmail.com)
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ *----------------------------------------------------------------------------*/
+
+var method = ChessBoard.prototype;
+
+
+function ChessBoard(){
+}
+
+/**
+* Configure chess table positions, (players and spectors).
+*/
+method.defineBoardSeats = function (_socket, _roomId, _flagRoom, _allRooms) {  
+	var socketRoomId = _roomId;
+
+	console.log('_allRooms');
+	console.log(_allRooms);
+
+	var playerA = _allRooms[socketRoomId].playerA;
+	var playerB = _allRooms[socketRoomId].playerB;
+
+	_socket.join(socketRoomId);
+	_socket.room = socketRoomId;
+
+	console.log('defineBoardSeats');
+	console.log(_socket.room);
+
+	console.log(playerA);
+
+	if(_flagRoom == 'createRoom'){
+	console.log('PlayerA is ' + _socket.id);
+	_socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'A'});
+
+	} else {
+		// joinRoom
+		if(playerB == null){
+			// player B joined in room
+			console.log('PlayerB is ' + _socket.id);
+			_allRooms[socketRoomId].playerB=_socket;
+			_socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'B'});
+		}else{
+			// GUESTS
+			console.log('GUEST');
+			_socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'GUEST'});
+		}
+
+	}
+};
+module.exports = ChessBoard;
