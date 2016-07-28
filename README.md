@@ -13,9 +13,9 @@ TODO
 
 ## How to install
 
-npm install express
-npm install socket.io
-nodejs index_sock_rooms.js
+npm install express;
+npm install socket.io;
+nodejs serverSockRooms.js
 
 
 run in your browser:
