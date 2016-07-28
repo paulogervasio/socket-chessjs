@@ -36,15 +36,6 @@ function RoomManager(io, chessBoard, allRooms){
 
 method.joinRoom = function (_socketData, socket) {
 
-    console.log('************ Joined!!');
-
-    console.log(this.allRooms);
-    console.log('join');
-
-    //console.log('joined');
-
-    console.log(_socketData.userName, _socketData.roomName);
-
     var users = [];
     var rooms = [];
 
@@ -52,41 +43,21 @@ method.joinRoom = function (_socketData, socket) {
 
     var ns = this.io.of("/"); 
 
-    console.log('all users connected');
-
     for (var id in ns.connected) {
-      console.log(id);
-      //console.log("roomName:" + ns.connected[id].rooms[1]);
       users.push(id);
-      //console.log('room id:');
-      //console.log(ns.connected[id].rooms);
-
       
       for (var roomByUserId in ns.connected[id].rooms) {
-          
-          //console.log('roomByUserId ==============================');
-          //console.log(ns.connected[id].rooms[roomByUserId]);
-
           var roomStr = ns.connected[id].rooms[roomByUserId]; 
           var n = roomStr.search("room_");
           if(n == 0){
-            //console.log('add to allConnectedRooms =++++++++++++++++++++++++++');
-            //console.log(roomStr);
             allConnectedRooms[roomStr] = true;
           }
       }
 
     }
 
-    //console.log('ALL CONNECTED ROOMS ***********************************');
     rooms = Object.keys(allConnectedRooms);
-
-    //console.log('io.sockets.adapter.rooms');
-    // console.log(io.sockets.adapter.rooms);
-
-    //console.log('send clientList');
     socket.emit('clientList', {users: users, userId: socket.id, rooms:rooms});
-  
 
 };
 method.changeRoom = function (_userData) {
@@ -108,9 +79,6 @@ method.changeRoom = function (_userData) {
     this.io.sockets.emit('userJoinRoom', {userId:socket.id, roomUsersData:roomUsersData});
     socketOwnerRoom.emit('startGame', {gameStarted:true, roomUsersData:roomUsersData});
 
-    console.log('----------------#####################----------------------');
-    console.log(this.allRooms);
-    console.log(this.chessBoard);
     this.chessBoard.defineBoardSeats(socket, roomId, 'joinRoom', this.allRooms);	
 };
 
@@ -121,22 +89,10 @@ method.createRoom = function (_userData) {
     var _roomId = _userData.roomId;
     var _playerA = _userData.userId;
 
-    console.log('createRoom:' + _userData.roomId);
-
     
     socket.join(_roomId);
 
     this.allRooms[_roomId] = {playerA:_playerA, playerB:null, guests:null};
-
-
-    console.log("_roomId: " + _roomId);
-    console.log("playerA: " + this.allRooms[_roomId].playerA);
-
-    console.log(this.allRooms);
-
-    console.log("_userData");
-    console.log(_userData);
-
     this.chessBoard.defineBoardSeats(socket, _roomId, 'createRoom', this.allRooms);
 
     console.log('newRoomAdded');
@@ -144,6 +100,4 @@ method.createRoom = function (_userData) {
  
 };
 
-
 module.exports = RoomManager;
-

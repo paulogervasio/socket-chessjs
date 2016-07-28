@@ -37,34 +37,23 @@ function ChessBoard(){
 method.defineBoardSeats = function (_socket, _roomId, _flagRoom, _allRooms) {  
 	var socketRoomId = _roomId;
 
-	console.log('_allRooms');
-	console.log(_allRooms);
-
 	var playerA = _allRooms[socketRoomId].playerA;
 	var playerB = _allRooms[socketRoomId].playerB;
 
 	_socket.join(socketRoomId);
 	_socket.room = socketRoomId;
 
-	console.log('defineBoardSeats');
-	console.log(_socket.room);
-
-	console.log(playerA);
-
 	if(_flagRoom == 'createRoom'){
-	console.log('PlayerA is ' + _socket.id);
 	_socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'A'});
 
 	} else {
 		// joinRoom
 		if(playerB == null){
 			// player B joined in room
-			console.log('PlayerB is ' + _socket.id);
 			_allRooms[socketRoomId].playerB=_socket;
 			_socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'B'});
 		}else{
 			// GUESTS
-			console.log('GUEST');
 			_socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'GUEST'});
 		}
 

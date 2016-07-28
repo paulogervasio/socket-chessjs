@@ -80,7 +80,7 @@ io.on('connection', function(socket){
   // AFTER SELECT THE ROOM
   //defineBoardSeats(socket);
   
-  allUsers.push(socket);
+  allUsers.push(socket);  
 
 
   console.log('newUserAdded');
@@ -92,8 +92,6 @@ io.on('connection', function(socket){
     }
   );
      
-
-
 
   socket.on('sendPiecePosition', function(_piecePosition){
     //io.emit('recei', msg);
