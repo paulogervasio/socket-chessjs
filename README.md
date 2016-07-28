@@ -1,13 +1,13 @@
-# socket-chessjs
+## Socket-chessjs
 
-A simple socket app using nodejs
-
+A simple socket app using nodejs and javascript.
 
 
 TODO
  - Generate Tests
  - Docker file to deploy
  - Design UI
+ - Storage for matches
 
 
 
