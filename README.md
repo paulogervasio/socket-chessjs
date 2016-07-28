@@ -1,4 +1,4 @@
-## Socket-chessjs
+# Socket-chessjs
 
 A simple socket app using nodejs and javascript.
 
@@ -11,7 +11,7 @@ TODO
 
 
 
-# How to install
+## How to install
 
 npm install express
 npm install socket.io
