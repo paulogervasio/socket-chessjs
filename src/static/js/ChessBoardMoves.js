@@ -30,6 +30,7 @@ class ChessBoardMoves{
 	    $f.get(0).contentWindow.configureChessGame(_boardData.side, this.currentRoom);
 
 	    if(_boardData.side != 'A'){
+	      //alert('S'+_boardData.roomId);
 	      $f.get(0).contentWindow.changeRoomId(_boardData.roomId);
 	    }
 

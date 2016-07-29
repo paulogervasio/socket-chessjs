@@ -117,7 +117,10 @@ io.on('connection', function(socket){
 
 
   socket.on('chat message', function(msg){
-    console.log(socket.room);
+    
+    console.log('chat message');
+    console.log(msg);
+
     socket.broadcast.emit('chat message', msg);
 
   });

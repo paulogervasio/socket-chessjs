@@ -62,8 +62,13 @@ method.joinRoom = function (_socketData, socket) {
 };
 method.changeRoom = function (_userData) {
 
+    console.log('changeRoom----------------');
+
+
     var userId =  _userData.userId;
     var roomId =  _userData.roomId;
+
+    console.log(roomId);
 
     var playerA = this.allRooms[roomId].playerA;
     var playerB = this.allRooms[roomId].playerB;
@@ -75,7 +80,6 @@ method.changeRoom = function (_userData) {
 
 
     var socket = this.io.sockets.connected[userId];
-    console.log(socket);
 
     var socketOwnerRoom = this.io.sockets.connected[_userData.roomId.replace('room_','')];
 
@@ -87,14 +91,12 @@ method.changeRoom = function (_userData) {
 
 method.createRoom = function (_userData) {
 
-
+    console.log('createRoom');
     var socket = this.io.sockets.connected[_userData.userId];
 
     var _roomId = _userData.roomId;
     var _playerA = _userData.userId;
 
-    console.log(this.io);
-    console.log('this.io');
     console.log(_userData.userId);
     socket.join(_roomId);
 

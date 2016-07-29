@@ -60,7 +60,7 @@ class App{
       this.chessBoardMoves = new ChessBoardMoves(this.currentRoom);
       this.room = new Room(this.myUserId, this.currentRoom);
 
-      this.userRoom = new UserRoom(this.currentRoom);
+      this.userRoom = new UserRoom(this.currentRoom, this);
 
     }
 
@@ -78,15 +78,17 @@ class App{
         this.socket.emit('join', {userName:this.userName, roomName:this.roomName});
 
         $('form').submit(function(){
-          socket.emit('chat message', $('#inputMessageField').val());
-          
-          $(divMessages).append($('<li>').text($('#inputMessageField').val()));
-          $('#inputMessageField').val('');
+            self.socket.emit('chat message', $('#inputMessageField').val());
+            
+            $("#messages").append($('<li>').text($('#inputMessageField').val()));
+            $('#inputMessageField').val('');
 
-          return false;
+            return false;
         });
+
         this.socket.on('chat message', function(msg){
-          $(divMessages).append($('<li>').text(msg));
+          console.log(msg);
+          $("#messages").append($('<li>').text(msg));
         });
 
         this.socket.on('newUserAdded', function(_userData){
@@ -131,7 +133,9 @@ class App{
 
           this.currentRoom = 'room_' + _boardData.userId;
 
-          this.userRoom.addNewUser(_boardData);
+          //alert( _boardData.userId);
+
+          self.userRoom.addNewUser(_boardData);
           self.chessBoardMoves.initGame(_boardData);
 
         });
@@ -178,7 +182,6 @@ class App{
     joinRoom(_roomId){
       //alert(myUserId + '||' +_roomId);
 
-      console.log('joinRoom');
       console.log(this.myUserId);
       console.log(_roomId);
       this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
@@ -212,35 +215,42 @@ class App{
       Verify after a user quited is a player of the game.
       Case its true the game is aborted.
     */
-    verifyGamePositions(userId){
+    /*verifyGamePositions(userId){
+
+      var playerA = this.playerA;
+      var playerB = this.playerB;
+
       console.log('Verify Game Positions');
       console.log(playerA);
       console.log(playerB);
       console.log(userId);
       console.log(Util.removeInvalidIdChars(playerA));
 
-      if((playerA && playerB) && userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
+      if((this.playerA && this.playerB) && userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
          alert('A player exited. The game has not enough players to continue and will be aborted.');
          exitRoom();
       }  
 
-    }
+    }*/
 
 
 
     sendPiecePosition(_move){
       console.log('sendPiecePosition');
+      console.log(_move);
+      _move.roomID = this.currentRoom;
       this.socket.emit('sendPiecePosition', _move);
     }
 
     createMyRoom(){
       console.log('createMyRoom');
+      console.log(this.myUserId);
       var _roomId = 'room_' + this.myUserId; 
       this.socket.emit('createRoom', {roomId:_roomId, userId:this.myUserId});
 
     }
 
-    exitRoom(){
-      location.reload();
+    static exitRoom(){
+     // location.reload();
     }
 }

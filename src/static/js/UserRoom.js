@@ -1,8 +1,9 @@
 "use strict";
 
 class UserRoom{
-    constructor(currentRoom){
+    constructor(currentRoom, app){
     	this.currentRoom = currentRoom;
+    	this.app = app;
     }
 
     /**
@@ -63,7 +64,7 @@ class UserRoom{
 
 	  }
 	  // TODO - call this method
-	  //verifyGamePositions(userId);
+	  //this.app.verifyGamePositions(userId);
 
 	}	 
 
