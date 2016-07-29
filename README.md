@@ -1,14 +1,14 @@
 # Socket-chessjs
 
-A simple socket app using nodejs and javascript and Docker.
+A chess multiplayer game with nodejs + javascript + Docker.
 
 
 TODO
- - Generate Tests
- - Docker file to deploy
  - Design UI
- - Storage for matches
+ - Storage for matches (to historical analysis)
  - Tests / front and backend
+ - Mobile version
+ - Login system
 
 
 
@@ -24,7 +24,7 @@ After download the file, execute the following commands:
 
 ```
 docker build -t=paulogervasio/socket-chess .;
-docker run -ti -p 3000:3000 paulogervasio/socket-chess;
+docker run -ti -d -p 3000:3000 paulogervasio/socket-chess;
 ```
 
 Now access application from browser typing http://[your_hostname:3000]/ and have fun!
