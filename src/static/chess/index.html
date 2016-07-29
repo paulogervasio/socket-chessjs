@@ -89,7 +89,7 @@
               return 'snapback';
             }else{
 
-              parent.sendPiecePosition({'source': source, 'target':target, 'roomID':roomID, 'FEN':game.fen()});
+              parent.app.sendPiecePosition({'source': source, 'target':target, 'roomID':roomID, 'FEN':game.fen()});
               //onSnapEnd();
               //alert(target);
 

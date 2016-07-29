@@ -7,12 +7,13 @@
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="static/js/App.js"></script>
     
     <script type="text/javascript" src="./static/js/script.js"></script>
     <script type="text/javascript" src="./static/js/helper/Util.js"></script>
     <script type="text/javascript" src="./static/js/UserRoom.js"></script>
+    <script type="text/javascript" src="./static/js/ChessBoardMoves.js"></script>
     <script type="text/javascript" src="./static/js/Room.js"></script>
+    <script type="text/javascript" src="./static/js/App.js"></script>
 
 
     <script>    
@@ -22,6 +23,11 @@
         produto.lista();
         Produto.teste();
         */
+
+        var app = new App();
+        
+        
+
 
         Util.removeInvalidIdChars('Teste 123456');
 
@@ -41,14 +47,14 @@
             if(e.which == 13) {
 
                 if(!chatInitalized){
-                  initApp();
+                  app.initApp();
                   chatInitalized = true;
                 }
             }
           });
 
           if(!chatInitalized){
-            initApp();
+            app.initApp();
             chatInitalized = true;
           }       
 
@@ -76,7 +82,7 @@
         <br/>
 
         <div id="createMyRom">
-          <a href="javascript:createMyRoom();">Create my own room</a>
+          <a href="javascript:app.createMyRoom();">Create my own room</a>
         </div>
         <div id="allConnectedUsers">
             <strong>All users in main room:<br/></strong>
@@ -87,7 +93,7 @@
     <div id="chatCredentials">
         <input id="name" autocomplete="off" />
         <br/>
-        <a href="javascript:initApp();">Init</a>
+        <a href="javascript:app.initApp();">Init</a>
     </div>
 
 
@@ -98,13 +104,13 @@
     <div id="chatContainer">
 
       <div id="exitRoom">
-        <a href="javascript:exitRoom();">Exit Room</a>
+        <a href="javascript:app.exitRoom();">Exit Room</a>
       </div>
 
 
       <ul id="messages"></ul>
       <form id='formSender' action="">
-        <input id="m" autocomplete="off" /><button>Send</button>
+        <input id="inputMessageField" autocomplete="off" /><button>Send</button>
       </form>
     <div>
     <div id="userContainer">

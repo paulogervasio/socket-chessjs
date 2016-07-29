@@ -57,7 +57,7 @@ method.joinRoom = function (_socketData, socket) {
     }
 
     rooms = Object.keys(allConnectedRooms);
-    socket.emit('clientList', {users: users, userId: socket.id, rooms:rooms});
+    socket.emit('listAllUsersInMainRoom', {users: users, userId: socket.id, rooms:rooms});
 
 };
 method.changeRoom = function (_userData) {
@@ -79,7 +79,7 @@ method.changeRoom = function (_userData) {
 
     var socketOwnerRoom = this.io.sockets.connected[_userData.roomId.replace('room_','')];
 
-    socket.broadcast.emit('userJoinRoom', {userId:socket.id, roomUsersData:roomUsersData});
+    socket.broadcast.emit('userJoinedInRoom', {userId:socket.id, roomUsersData:roomUsersData});
     socketOwnerRoom.emit('startGame', {gameStarted:true, roomUsersData:roomUsersData});
 
     this.chessBoard.defineBoardSeats(socket, roomId, 'joinRoom', this.allRooms);	
@@ -87,12 +87,15 @@ method.changeRoom = function (_userData) {
 
 method.createRoom = function (_userData) {
 
+
     var socket = this.io.sockets.connected[_userData.userId];
 
     var _roomId = _userData.roomId;
     var _playerA = _userData.userId;
 
-    
+    console.log(this.io);
+    console.log('this.io');
+    console.log(_userData.userId);
     socket.join(_roomId);
 
     this.allRooms[_roomId] = {playerA:_playerA, playerB:null, guests:null};

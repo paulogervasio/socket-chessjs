@@ -27,381 +27,220 @@
  *
  *----------------------------------------------------------------------------*/
 
+"use strict";
 
-var userName = 'myUsername';
-var myUserId;
+class App{
 
-var currentRoom = 'mainRoom';
-var roomName = 'myRoomName';
 
-var playerA;
-var playerB;
-var guests = [];
+    constructor(){
+      this.userName = 'myUsername';
+      this.myUserId;
 
-var socket = null;
+      this.currentRoom = 'mainRoom';
+      this.roomName = 'myRoomName';
 
-function configSocket(){
+      this.playerA;
+      this.playerB;
+      this.guests = [];
 
-    socket = io();        
+      this.socket = null;
 
-    chatInitalized = true;
+      this.divMessages = '#messages';
+      this.mainRoom = '#mainRoom';
+      this.allConnectedUsers = '#allConnectedUsers';
 
+      this.chatContainer = '#chatContainer';
+      this.gameContainer = '#gameContainer'; 
+      this.chatCredentials = '#chatCredentials'; 
 
-    //alert('userName' + userName);
-    socket.emit('join', {userName:userName, roomName:roomName});
+      this.socket = null;
 
-    $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
-      
-      $('#messages').append($('<li>').text($('#m').val()));
+      this.self = this;
 
-      $('#m').val('');
-      return false;
-    });
-    socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
-    });
+      this.chessBoardMoves = new ChessBoardMoves(this.currentRoom);
+      this.room = new Room(this.myUserId, this.currentRoom);
 
-    socket.on('newUserAdded', function(_userData){
-      UserRoom.addNewUser(_userData);
-    });
+      this.userRoom = new UserRoom(this.currentRoom);
 
-    socket.on('userJoinRoom', function(_userData){
-      userJoinRoom(_userData);
-    });
-
-    socket.on('newRoomAdded', function(_roomData){
-      Room.addNewRoom(_roomData);
-    });
-
-
-    socket.on('startGame', function(_statusGame){
-      startChessGame(_statusGame);
-    });
-
-    
-
-    
-
-
-    socket.on('clientList', function(_list){
-
-        console.log('clientList');
-
-        var clientList = _list.users;
-        var roomList = _list.rooms;
-        
-        console.log(_list.userId);
-        myUserId = _list.userId;
-
-        $("#userIdLabel").text('My id is: [' + _list.userId + ']');
-
-
-        // list all available rooms
-        for(var i=0;i<roomList.length;i++){
-
-          if(roomList[i] != 'mainRoom'){
-            //
-            var selectedRoom = roomList[i]; 
-            var option = '<div id="'+ Util.removeInvalidIdChars(selectedRoom) +'">' + '<a href="javascript:joinRoom(\''+selectedRoom+'\')">'+selectedRoom + '</a></div>';
-            //
-
-            //alert(selectedRoom);
-            //alert(selectedRoom.replace('room_',''));
-
-            var userRoomOwner = selectedRoom.replace('room_','');
-
-            // remove user room owner from main room
-            var index = clientList.indexOf(userRoomOwner);
-            clientList.splice(index, 1);
-            //
-
-            $("#mainRoom").find("#allConnectedRooms").append(option);
-            $('#mainRoom').find("#allConnectedUsers").find("#" + Util.removeInvalidIdChars(userRoomOwner)).remove(); 
-          }
-        }
-
-
-        // list all available clients
-        
-        for(var i=0;i<clientList.length;i++){
-
-          if(clientList[i] != _list.userId){
-
-            var _id = clientList[i];
-
-            var userId = Util.removeInvalidIdChars(_id);
-            //
-            var option = '<div id="'+ userId +'">' + userId + '</div>';
-            //var selectedOption = '<div id="room' + (i+1) +'">';
-            //var option = selectedOption + clientList[i] + "</div>";
-            //
-            $('#mainRoom').find("#allConnectedUsers").append(option);
-          }
-        }
-        
-
-    });
-
-
-    socket.on('removedUser', function(_userData){
-        UserRoom.removeUser(_userData);
-    });
-
-    socket.on('boardConfig', function(_boardData){
-        //alert(_boardConfig.side);
-
-      $('#gameContainer').show();
-      $('#chatContainer').show();
-
-      $('#chatCredentials').hide();
-      $('#mainRoom').hide();
-
-      console.log('BOARD CONFIG');
-      console.log(_boardData);
-        
-
-      currentRoom = 'room_' + _boardData.userId;
-
-      UserRoom.addNewUser(_boardData);
-      initGame(_boardData);
-
-    });
-
-    socket.on('receivePiecePosition', function(_piecePosition){
-        //alert('_piecePosition: ' + _piecePosition);
-        //alert(_boardConfig.side);
-        receivePiecePosition(_piecePosition);
-
-    });        
-
-    
-
-
-    $('#formSender').find("#m").focus();
-
-}
-
-
-function initApp(){
-
-
-    $('#gameContainer').hide();
-
-    $('#chatCredentials').hide();
-    $('#chatContainer').hide();
-
-    configSocket();
-    
-
-}
-
-
-/*
-OK
-function removeInvalidIdChars(_name){
-
-  console.log(_name);
-
-  _name = _name.replace('/','');
-  _name = _name.replace('#','');
-
-  //alert(_name);
-  return _name;
-
-}
-*/
-
-function joinRoom(_roomId){
-  //alert(myUserId + '||' +_roomId);
-  socket.emit('changeRoom', {userId:myUserId, roomId:_roomId});
-  
-}
-/*
-function addNewRoom(_roomData){
-
-  console.log('addNewRoom');
-  console.log(_roomData);
-
-  var userIdOwner = _roomData.userIdOwner;
-  var roomId = _roomData.roomId;
-
-  if(currentRoom == 'mainRoom'){
-    var option = '<div id="'+ Util.removeInvalidIdChars(roomId) +'">' + '<a href="javascript:joinRoom(\''+roomId+'\')">'+roomId + '</a></div>';
-
-    $("#mainRoom").find("#allConnectedRooms").append(option);
-    $('#mainRoom').find("#allConnectedUsers").find("#" + Util.removeInvalidIdChars(userIdOwner)).remove(); 
-  }
-
-}
-*/
-
-function userJoinRoom(_userData){
-
-  console.log('userJoinRoom');
-  console.log(_userData);
-
-  playerA = _userData.roomUsersData.playerA;
-  playerB = _userData.roomUsersData.playerB;
-
-  console.log(playerA);
-
-  // remove user from main room
-  var userId = Util.removeInvalidIdChars(_userData.userId);
-  $('#mainRoom').find("#allConnectedUsers").find("#" + userId).remove(); 
-
-  /*// TODO - add user to joined room list
-  var option = '<div id="'+ userId +'">' + userId + '</div>';
-  $('#userContainer').find("#usersBox").append(option); 
-  */
-
-}
-
-
-/*
-function addNewUser(_userData){
-
-  console.log('addNewUser | remove user???');
-
-  console.log(_userData);
-  console.log(currentRoom);
-
-  var userRoom = _userData.roomId;
-  var userId = _userData.userId;
-
-  userId = Util.removeInvalidIdChars(userId);
-
-  console.log(userRoom +'=='+ currentRoom);
-
-  //alert(currentRoom);
-
-  var option = '<div id="'+ userId +'">' + userId + '</div>';
-  
-  if(userRoom == 'mainRoom'){
-    $('#mainRoom').find("#allConnectedUsers").append(option);
-  }else{
-    console.log('add user ' + userId + ' to userbox');
-    $('#userContainer').find("#usersBox").append(option);
-
-  }
-}
-*/
-
-/*
-function removeUser(_userData){
-
-  console.log('removeUser');
-  console.log(_userData);
-
-  var userId = _userData.userId;
-  var roomId = _userData.roomId;
-
-  userId = Util.removeInvalidIdChars(userId);
-  roomId = Util.removeInvalidIdChars(roomId);
-  // remove invalid chars
-
-  console.log(userId);
-  console.log(roomId);
-
-  if(currentRoom == 'mainRoom'){
-
-    $("#mainRoom").find("#allConnectedUsers").find("#" + userId).remove();
-    $("#mainRoom").find("#allConnectedRooms").find("#" + roomId).remove();
-
-  }
-
-  console.log(currentRoom + '==' + roomId);
-  if(currentRoom == roomId){
-    $('#userContainer').find("#usersBox").find(userId).remove();
-
-  }
-  verifyGamePositions(userId);
-
-}
-*/
-
-/**
-  Verify after a user quited is a player of the game.
-  Case its true the game is aborted.
-*/
-
-/*
-function verifyGamePositions(userId){
-  console.log('Verify Game Positions');
-  console.log(playerA);
-  console.log(playerB);
-  console.log(userId);
-  console.log(Util.removeInvalidIdChars(playerA));
-
-  if((playerA && playerB) && userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
-     alert('A player exited. The game has not enough players to continue and will be aborted.');
-     exitRoom();
-  }  
-
-}
-*/
-
-function sendPiecePosition(_move){
-  
-  //alert('sendPiecePosition received');
-  //console.log(_piecePosition);
-
-  
-  socket.emit('sendPiecePosition', _move);
-}
-function receivePiecePosition(_move){
-  console.log('sendPiecePosition received');
-  //alert('sendPiecePosition received');
-  //alert(_piecePosition);
-  //socket.emit('sendPiecePosition', _piecePosition);
-
-  var $f = $("#gameContainer");
-  $f.get(0).contentWindow.movePiece(_move);
-
-  
-}
-
-function createMyRoom(){
-
-  //alert('Create my room: room_' + userId);
-
-  var _roomId = 'room_' + myUserId; 
-  socket.emit('createRoom', {roomId:_roomId, userId:myUserId});
-
-}
-
-function exitRoom(){
-  location.reload();
-}
-
-function initGame(_boardData){
-  //$('#gameContainer').load("http://localhost:3000/chess/");
-  //$('#gameContainer').call(initChessBoard());
-
- // alert('initGame' + _boardData.side);
-
-  $('#gameContainer').attr('src', "chess/");
-
-  //alert('initGame');
-  $('#gameContainer').load(function(){
-    //alert('loaded');
-
-    var $f = $("#gameContainer");
-    $f.get(0).contentWindow.configureChessGame(_boardData.side, currentRoom);
-
-    if(_boardData.side != 'A'){
-      $f.get(0).contentWindow.changeRoomId(_boardData.roomId);
     }
 
-  });
+    configSocket(){
+
+        var self = this;
+
+        console.log('configSocket');
+        this.socket = io();        
+
+        chatInitalized = true;
+
+
+        //alert('userName' + userName);
+        this.socket.emit('join', {userName:this.userName, roomName:this.roomName});
+
+        $('form').submit(function(){
+          socket.emit('chat message', $('#inputMessageField').val());
+          
+          $(divMessages).append($('<li>').text($('#inputMessageField').val()));
+          $('#inputMessageField').val('');
+
+          return false;
+        });
+        this.socket.on('chat message', function(msg){
+          $(divMessages).append($('<li>').text(msg));
+        });
+
+        this.socket.on('newUserAdded', function(_userData){
+          self.userRoom.addNewUser(_userData);
+        });
+
+        this.socket.on('userJoinedInRoom', function(_userData){
+          self.userJoinedInRoom(_userData);
+        });
+
+        this.socket.on('newRoomAdded', function(_roomData){
+          self.room.addNewRoom(_roomData);
+        });
+
+
+        this.socket.on('startGame', function(_statusGame){
+          self.chessBoardMoves.startChessGame(_statusGame);
+        });
+
+        
+        this.socket.on('listAllUsersInMainRoom', function(_list){
+          self.listAllUsersInMainRoom(_list);
+        });
+
+
+        this.socket.on('removedUser', function(_userData){
+          self.userRoom.removeUser(_userData);
+        });
+
+        this.socket.on('boardConfig', function(_boardData){
+            //alert(_boardConfig.side);
+
+          $(gameContainer).show();
+          $(chatContainer).show();
+
+          $(chatCredentials).hide();
+          $(mainRoom).hide();
+
+          console.log('BOARD CONFIG');
+          console.log(_boardData);
+            
+
+          this.currentRoom = 'room_' + _boardData.userId;
+
+          this.userRoom.addNewUser(_boardData);
+          self.chessBoardMoves.initGame(_boardData);
+
+        });
+
+        this.socket.on('receivePiecePosition', function(_piecePosition){
+            console.log('receivePiecePosition')
+            ChessBoardMoves.receivePiecePosition(_piecePosition);
+        });        
+
+        //$('#formSender').find("#m").focus();
+    }
+
+    listAllUsersInMainRoom(_list){
+      console.log('clientList');
+
+      var clientList = _list.users;
+      var roomList = _list.rooms;
+
+      console.log(_list.userId);
+      this.myUserId = _list.userId;
+
+      $("#userIdLabel").text('My id is: [' + _list.userId + ']');
+
+      Room.listAllAvailableRooms(roomList, clientList);
+      Room.listAllAvailableClients(roomList, clientList, _list);
+     
+    }     
+
+
+    initApp(){
+
+
+        $(gameContainer).hide();
+
+        $(chatCredentials).hide();
+        $(chatContainer).hide();
+
+        this.configSocket();
+        
+
+    }
+
+
+    joinRoom(_roomId){
+      //alert(myUserId + '||' +_roomId);
+
+      console.log('joinRoom');
+      console.log(this.myUserId);
+      console.log(_roomId);
+      this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
+      
+    }
+
+    userJoinedInRoom(_userData){
+
+      console.log('userJoinedIRoom');
+      console.log(_userData);
+
+      this.playerA = _userData.roomUsersData.playerA;
+      this.playerB = _userData.roomUsersData.playerB;
+
+      console.log(this.playerA);
+
+      // remove user from main room
+      var userId = Util.removeInvalidIdChars(_userData.userId);
+      $(mainRoom).find(allConnectedUsers).find("#" + userId).remove(); 
+
+      /*// TODO - add user to joined room list
+      var option = '<div id="'+ userId +'">' + userId + '</div>';
+      $('#userContainer').find("#usersBox").append(option); 
+      */
+
+    }
+
+
+
+    /**
+      Verify after a user quited is a player of the game.
+      Case its true the game is aborted.
+    */
+    verifyGamePositions(userId){
+      console.log('Verify Game Positions');
+      console.log(playerA);
+      console.log(playerB);
+      console.log(userId);
+      console.log(Util.removeInvalidIdChars(playerA));
+
+      if((playerA && playerB) && userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
+         alert('A player exited. The game has not enough players to continue and will be aborted.');
+         exitRoom();
+      }  
+
+    }
+
+
+
+    sendPiecePosition(_move){
+      console.log('sendPiecePosition');
+      this.socket.emit('sendPiecePosition', _move);
+    }
+
+    createMyRoom(){
+      console.log('createMyRoom');
+      var _roomId = 'room_' + this.myUserId; 
+      this.socket.emit('createRoom', {roomId:_roomId, userId:this.myUserId});
+
+    }
+
+    exitRoom(){
+      location.reload();
+    }
 }
-function startChessGame(_gameData){
-  //alert('Start chess game: ' + _statusGame);
-
-  console.log('Starting Game ##############################');
-  console.log(_gameData);
-
-  var $f = $("#gameContainer");
-  $f.get(0).contentWindow.startChessGame();
-
-}        

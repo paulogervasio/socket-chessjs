@@ -1,7 +1,8 @@
 "use strict";
 
 class UserRoom{
-    constructor(){
+    constructor(currentRoom){
+    	this.currentRoom = currentRoom;
     }
 
     /**
@@ -9,21 +10,17 @@ class UserRoom{
 	*
 	*  TODO - remove div string names. Replace it for a parameter like _AllConnectedUsersDiv and _userBoxDiv
     */
-	static addNewUser(_userData){
-
-	  console.log('addNewUser | remove user???');
+	addNewUser(_userData){
 
 	  console.log(_userData);
-	  console.log(currentRoom);
+	  console.log(this.currentRoom);
 
 	  var userRoom = _userData.roomId;
 	  var userId = _userData.userId;
 
 	  userId = Util.removeInvalidIdChars(userId);
 
-	  console.log(userRoom +'=='+ currentRoom);
-
-	  //alert(currentRoom);
+	  console.log(userRoom +'=='+ this.currentRoom);
 
 	  var option = '<div id="'+ userId +'">' + userId + '</div>';
 	  
@@ -38,7 +35,7 @@ class UserRoom{
 	/**
 	* 
 	*/
-	static removeUser(_userData){
+	removeUser(_userData){
 
 	  console.log('removeUser');
 	  console.log(_userData);
@@ -53,15 +50,15 @@ class UserRoom{
 	  console.log(userId);
 	  console.log(roomId);
 
-	  if(currentRoom == 'mainRoom'){
+	  if(this.currentRoom == 'mainRoom'){
 
 	    $("#mainRoom").find("#allConnectedUsers").find("#" + userId).remove();
 	    $("#mainRoom").find("#allConnectedRooms").find("#" + roomId).remove();
 
 	  }
 
-	  console.log(currentRoom + '==' + roomId);
-	  if(currentRoom == roomId){
+	  console.log(this.currentRoom + '==' + roomId);
+	  if(this.currentRoom == roomId){
 	    $('#userContainer').find("#usersBox").find(userId).remove();
 
 	  }
