@@ -1,6 +1,6 @@
 # Socket-chessjs
 
-A simple socket app using nodejs and javascript.
+A simple socket app using nodejs and javascript and Docker.
 
 
 TODO
@@ -13,13 +13,17 @@ TODO
 
 ## How to install
 
-npm install express;
-npm install socket.io;
-nodejs serverSockRooms.js
+Create a directory to host the Dockerfile:
+mkdir sockchess;
+cd sockchess;
 
 
-run in your browser:
-localhost:3000
 
-and have fun!
+
+docker build -t=paulogervasio/socket-chess .;
+docker run -ti -p 3000:3000 paulogervasio/socket-chess;
+
+
+
+Now access application from browser typing http://<hostname>:3000/ and have fun!
 
