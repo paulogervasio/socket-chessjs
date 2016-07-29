@@ -11,6 +11,7 @@ TODO
  - Tests / front and backend
 
 
+
 ## How to install
 
 Create a directory to host the Dockerfile and download it:
@@ -26,5 +27,5 @@ docker build -t=paulogervasio/socket-chess .;
 docker run -ti -p 3000:3000 paulogervasio/socket-chess;
 ```
 
-Now access application from browser typing http://<hostname>:3000/ and have fun!
+Now access application from browser typing http://[your_hostname:3000]/ and have fun!
 
