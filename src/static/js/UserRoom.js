@@ -64,7 +64,7 @@ class UserRoom{
 
 	  }
 	  // TODO - call this method
-	  //this.app.verifyGamePositions(userId);
+	  this.app.verifyGamePositions(userId);
 
 	}	 
 

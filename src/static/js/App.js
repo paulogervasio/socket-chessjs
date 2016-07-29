@@ -215,23 +215,23 @@ class App{
       Verify after a user quited is a player of the game.
       Case its true the game is aborted.
     */
-    /*verifyGamePositions(userId){
+    verifyGamePositions(userId){
 
       var playerA = this.playerA;
       var playerB = this.playerB;
 
       console.log('Verify Game Positions');
       console.log(playerA);
-      console.log(playerB);
+      console.log(playerB != undefined);
       console.log(userId);
       console.log(Util.removeInvalidIdChars(playerA));
 
-      if((this.playerA && this.playerB) && userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
+      if((playerA != undefined && playerB != undefined) && userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
          alert('A player exited. The game has not enough players to continue and will be aborted.');
-         exitRoom();
+         App.exitRoom();
       }  
 
-    }*/
+    }
 
 
 
@@ -251,6 +251,6 @@ class App{
     }
 
     static exitRoom(){
-     // location.reload();
+      location.reload();
     }
 }
