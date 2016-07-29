@@ -8,7 +8,8 @@ TODO
  - Storage for matches (to historical analysis)
  - Tests / front and backend
  - Mobile version
- - Login system
+ - Auth system
+
 
 
 
