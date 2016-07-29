@@ -28,8 +28,6 @@
  *----------------------------------------------------------------------------*/
 
 
-
-
 var userName = 'myUsername';
 var myUserId;
 
@@ -65,7 +63,7 @@ function configSocket(){
     });
 
     socket.on('newUserAdded', function(_userData){
-      addNewUser(_userData);
+      UserRoom.addNewUser(_userData);
     });
 
     socket.on('userJoinRoom', function(_userData){
@@ -73,7 +71,7 @@ function configSocket(){
     });
 
     socket.on('newRoomAdded', function(_roomData){
-      addNewRoom(_roomData);
+      Room.addNewRoom(_roomData);
     });
 
 
@@ -105,7 +103,7 @@ function configSocket(){
           if(roomList[i] != 'mainRoom'){
             //
             var selectedRoom = roomList[i]; 
-            var option = '<div id="'+ removeInvalidIdChars(selectedRoom) +'">' + '<a href="javascript:joinRoom(\''+selectedRoom+'\')">'+selectedRoom + '</a></div>';
+            var option = '<div id="'+ Util.removeInvalidIdChars(selectedRoom) +'">' + '<a href="javascript:joinRoom(\''+selectedRoom+'\')">'+selectedRoom + '</a></div>';
             //
 
             //alert(selectedRoom);
@@ -119,7 +117,7 @@ function configSocket(){
             //
 
             $("#mainRoom").find("#allConnectedRooms").append(option);
-            $('#mainRoom').find("#allConnectedUsers").find("#" + removeInvalidIdChars(userRoomOwner)).remove(); 
+            $('#mainRoom').find("#allConnectedUsers").find("#" + Util.removeInvalidIdChars(userRoomOwner)).remove(); 
           }
         }
 
@@ -132,7 +130,7 @@ function configSocket(){
 
             var _id = clientList[i];
 
-            var userId = removeInvalidIdChars(_id);
+            var userId = Util.removeInvalidIdChars(_id);
             //
             var option = '<div id="'+ userId +'">' + userId + '</div>';
             //var selectedOption = '<div id="room' + (i+1) +'">';
@@ -147,7 +145,7 @@ function configSocket(){
 
 
     socket.on('removedUser', function(_userData){
-        removeUser(_userData);
+        UserRoom.removeUser(_userData);
     });
 
     socket.on('boardConfig', function(_boardData){
@@ -165,8 +163,7 @@ function configSocket(){
 
       currentRoom = 'room_' + _boardData.userId;
 
-
-      addNewUser(_boardData);
+      UserRoom.addNewUser(_boardData);
       initGame(_boardData);
 
     });
@@ -200,7 +197,8 @@ function initApp(){
 }
 
 
-
+/*
+OK
 function removeInvalidIdChars(_name){
 
   console.log(_name);
@@ -212,14 +210,14 @@ function removeInvalidIdChars(_name){
   return _name;
 
 }
+*/
 
 function joinRoom(_roomId){
-
   //alert(myUserId + '||' +_roomId);
   socket.emit('changeRoom', {userId:myUserId, roomId:_roomId});
   
 }
-
+/*
 function addNewRoom(_roomData){
 
   console.log('addNewRoom');
@@ -229,14 +227,14 @@ function addNewRoom(_roomData){
   var roomId = _roomData.roomId;
 
   if(currentRoom == 'mainRoom'){
-    var option = '<div id="'+ removeInvalidIdChars(roomId) +'">' + '<a href="javascript:joinRoom(\''+roomId+'\')">'+roomId + '</a></div>';
+    var option = '<div id="'+ Util.removeInvalidIdChars(roomId) +'">' + '<a href="javascript:joinRoom(\''+roomId+'\')">'+roomId + '</a></div>';
 
     $("#mainRoom").find("#allConnectedRooms").append(option);
-    $('#mainRoom').find("#allConnectedUsers").find("#" + removeInvalidIdChars(userIdOwner)).remove(); 
+    $('#mainRoom').find("#allConnectedUsers").find("#" + Util.removeInvalidIdChars(userIdOwner)).remove(); 
   }
 
 }
-
+*/
 
 function userJoinRoom(_userData){
 
@@ -249,7 +247,7 @@ function userJoinRoom(_userData){
   console.log(playerA);
 
   // remove user from main room
-  var userId = removeInvalidIdChars(_userData.userId);
+  var userId = Util.removeInvalidIdChars(_userData.userId);
   $('#mainRoom').find("#allConnectedUsers").find("#" + userId).remove(); 
 
   /*// TODO - add user to joined room list
@@ -259,9 +257,8 @@ function userJoinRoom(_userData){
 
 }
 
-/**
-  Add new user both main room and game rooms
-*/
+
+/*
 function addNewUser(_userData){
 
   console.log('addNewUser | remove user???');
@@ -272,7 +269,7 @@ function addNewUser(_userData){
   var userRoom = _userData.roomId;
   var userId = _userData.userId;
 
-  userId = removeInvalidIdChars(userId);
+  userId = Util.removeInvalidIdChars(userId);
 
   console.log(userRoom +'=='+ currentRoom);
 
@@ -288,7 +285,9 @@ function addNewUser(_userData){
 
   }
 }
+*/
 
+/*
 function removeUser(_userData){
 
   console.log('removeUser');
@@ -297,8 +296,8 @@ function removeUser(_userData){
   var userId = _userData.userId;
   var roomId = _userData.roomId;
 
-  userId = removeInvalidIdChars(userId);
-  roomId = removeInvalidIdChars(roomId);
+  userId = Util.removeInvalidIdChars(userId);
+  roomId = Util.removeInvalidIdChars(roomId);
   // remove invalid chars
 
   console.log(userId);
@@ -308,27 +307,39 @@ function removeUser(_userData){
 
     $("#mainRoom").find("#allConnectedUsers").find("#" + userId).remove();
     $("#mainRoom").find("#allConnectedRooms").find("#" + roomId).remove();
+
   }
 
   console.log(currentRoom + '==' + roomId);
   if(currentRoom == roomId){
-    $('#userContainer').find("#usersBox").find(userId).remove();  
-  }
+    $('#userContainer').find("#usersBox").find(userId).remove();
 
+  }
+  verifyGamePositions(userId);
 
 }
+*/
 
 /**
   Verify after a user quited is a player of the game.
   Case its true the game is aborted.
 */
-function verifyGamePositions(){
-  if((playerA && playerB) && userId == removeInvalidIdChars(playerA) || userId == removeInvalidIdChars(playerB)){
+
+/*
+function verifyGamePositions(userId){
+  console.log('Verify Game Positions');
+  console.log(playerA);
+  console.log(playerB);
+  console.log(userId);
+  console.log(Util.removeInvalidIdChars(playerA));
+
+  if((playerA && playerB) && userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
      alert('A player exited. The game has not enough players to continue and will be aborted.');
-     io.emmit('end');
+     exitRoom();
   }  
 
 }
+*/
 
 function sendPiecePosition(_move){
   
@@ -357,7 +368,10 @@ function createMyRoom(){
   var _roomId = 'room_' + myUserId; 
   socket.emit('createRoom', {roomId:_roomId, userId:myUserId});
 
+}
 
+function exitRoom(){
+  location.reload();
 }
 
 function initGame(_boardData){

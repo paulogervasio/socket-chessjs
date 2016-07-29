@@ -7,9 +7,24 @@
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="static/js/room.js"></script>
+    <script src="static/js/App.js"></script>
     
+    <script type="text/javascript" src="./static/js/script.js"></script>
+    <script type="text/javascript" src="./static/js/helper/Util.js"></script>
+    <script type="text/javascript" src="./static/js/UserRoom.js"></script>
+    <script type="text/javascript" src="./static/js/Room.js"></script>
+
+
     <script>    
+
+        /*
+        var produto = new Produto("Paulo");
+        produto.lista();
+        Produto.teste();
+        */
+
+        Util.removeInvalidIdChars('Teste 123456');
+
 
         var chatInitalized = false;
         $( document ).ready(function() {
@@ -76,10 +91,17 @@
     </div>
 
 
+
     <iframe id="gameContainer"></iframe>
 
 
     <div id="chatContainer">
+
+      <div id="exitRoom">
+        <a href="javascript:exitRoom();">Exit Room</a>
+      </div>
+
+
       <ul id="messages"></ul>
       <form id='formSender' action="">
         <input id="m" autocomplete="off" /><button>Send</button>

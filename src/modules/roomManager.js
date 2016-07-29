@@ -73,10 +73,13 @@ method.changeRoom = function (_userData) {
 
     var roomUsersData = {playerA:playerA, playerB:playerB, guests:guests};
 
+
     var socket = this.io.sockets.connected[userId];
+    console.log(socket);
+
     var socketOwnerRoom = this.io.sockets.connected[_userData.roomId.replace('room_','')];
 
-    this.io.sockets.emit('userJoinRoom', {userId:socket.id, roomUsersData:roomUsersData});
+    socket.broadcast.emit('userJoinRoom', {userId:socket.id, roomUsersData:roomUsersData});
     socketOwnerRoom.emit('startGame', {gameStarted:true, roomUsersData:roomUsersData});
 
     this.chessBoard.defineBoardSeats(socket, roomId, 'joinRoom', this.allRooms);	
