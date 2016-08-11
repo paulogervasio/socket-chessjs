@@ -45,14 +45,12 @@ var allRooms = [];
 
 var RoomManager = require('./modules/roomManager.js');
 var ChessBoard = require('./modules/chessBoard.js');
+var SocketManager = require('./modules/socketManager.js');
 
 var chessBoard = new ChessBoard();
 var roomManager = new RoomManager(io, chessBoard, allRooms);
+var socketManager = new SocketManager(roomManager);
 
-
-// replaced by dictionary room
-//var playerA = null;
-//var playerB = null;
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/static/index.html');
@@ -64,83 +62,7 @@ app.get('/chessboard', function(req, res){
 
 
 io.on('connection', function(socket){
-
-      
-  console.log('connected');
-
-  //console.log('userName:' + _userName + ' connected');
-  console.log('session id:' + socket.id);
-
-  //console.log('room_' + socket.id.toString());
-
-  socket.join('mainRoom');
-  socket.room = 'mainRoom';
-
-  // AFTER SELECT THE ROOM
-  //defineBoardSeats(socket);
-  
-  allUsers.push(socket);
-
-
-  console.log('newUserAdded');
-  console.log(socket.room);
-
-  socket.broadcast.emit('newUserAdded', {userId:socket.id,roomId:'mainRoom'});
-  socket.on('join', function(_socketData){
-      roomManager.joinRoom(_socketData, socket);
-    }
-  );
-     
-
-  socket.on('sendPiecePosition', function(_piecePosition){
-    //io.emit('recei', msg);
-
-    console.log('sendPiecePosition');
-    console.log(_piecePosition);
-    console.log(socket.room);
-    console.log(_piecePosition.roomID);
-
-    socket.broadcast.to(_piecePosition.roomID).emit('receivePiecePosition', _piecePosition);
-    
-
-  });
-
-  socket.on('createRoom', function(_userData){
-    roomManager.createRoom(_userData);
-  });
-
-  socket.on('changeRoom', function(_userData){
-    console.log('changeRoom');
-    roomManager.changeRoom(_userData);
-  });
-
-
-  socket.on('chat message', function(msg){
-    
-    console.log('chat message');
-    console.log(msg);
-
-    socket.broadcast.emit('chat message', msg);
-
-  });
-
-  socket.on('disconnect', function(){
-    console.log('disconnect');
-    console.log(socket.room);
-
-    socket.broadcast.emit('removedUser', {userId:socket.id,roomId:socket.room});
-
-    allUsers.splice(allUsers.indexOf(socket), 1);
-
-  });
-
-  socket.once('disconnect', function (_user) {
-     console.log('DISCONECTED');
-     console.log(socket.room);
-
-
-  });  
-
+  socketManager.configEvents(socket, roomManager);
 
 });
 
