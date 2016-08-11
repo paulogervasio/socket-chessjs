@@ -54,7 +54,6 @@ var roomManager = new RoomManager(io, chessBoard, allRooms);
 //var playerA = null;
 //var playerB = null;
 
-
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/static/index.html');
 });
