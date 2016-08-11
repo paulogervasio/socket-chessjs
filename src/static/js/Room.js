@@ -42,8 +42,6 @@ class Room{
 	    if(roomList[i] != 'mainRoom'){
 	      //
 	      var selectedRoom = roomList[i]; 
-	      //
-
 	      var userRoomOwner = selectedRoom.replace('room_','');
 
 	      // remove user room owner from main room
@@ -51,12 +49,9 @@ class Room{
 	      clientList.splice(index, 1);
 	      //
 
-	      //var option = '<div id="'+ Util.removeInvalidIdChars(selectedRoom) +'">' + '<a href="javascript:app.joinRoom(\''+selectedRoom+'\')">'+selectedRoom + '</a></div>';
-	      //$("#mainRoom").find("#allConnectedRooms").append(option);
-
 		  Room.createRoomButtonLink({roomId:selectedRoom});
+	      $('#mainRoom').find("#allConnectedUsers").find("#" + Util.removeInvalidIdChars(userRoomOwner)).remove();
 
-	      $('#mainRoom').find("#allConnectedUsers").find("#" + Util.removeInvalidIdChars(userRoomOwner)).remove(); 
 	    }
 	  }
 
@@ -64,7 +59,6 @@ class Room{
 
 	static listAllAvailableClients(roomList, clientList, _list, userRoom){
 	  // list all available clients
-
 	  for(var i=0;i<clientList.length;i++){
 
 	    if(clientList[i] != _list.userId){
