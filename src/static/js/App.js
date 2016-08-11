@@ -218,16 +218,12 @@ class App{
     */
     verifyGamePositions(userId){
 
+      console.log(' ----- verifyGamePositions');
+
       var playerA = this.playerA;
       var playerB = this.playerB;
 
-      console.log('Verify Game Positions');
-      console.log(playerA);
-      console.log(playerB != undefined);
-      console.log(userId);
-      console.log(Util.removeInvalidIdChars(playerA));
-
-      if((playerA != undefined && playerB != undefined) && userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
+      if(userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
          alert('A player exited. The game has not enough players to continue and will be aborted.');
          App.exitRoom();
       }  
