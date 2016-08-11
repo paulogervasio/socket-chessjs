@@ -62,6 +62,8 @@ app.get('/chessboard', function(req, res){
 
 
 io.on('connection', function(socket){
+
+  // config socket events
   socketManager.configEvents(socket, roomManager);
 
 });
