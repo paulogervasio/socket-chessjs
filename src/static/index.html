@@ -80,26 +80,33 @@
     
     <div>
       <div id="mainRoom" class="jumbotron">
-          Main Room:<br/>
+          <p>Main Room:<br/></p>
           <div id="userLabel">
             <p id="userIdLabel">My id:</p>
           </div>
           <strong>All Connected rooms</strong>
           <br/>
-          <div id="allConnectedRooms">
-              click to join to the room:<br/>
+
+          <div id="allConnectedRooms" class="containerLinks">
+              <p></p>
+              <ul class="list-group">          
+                <li class="list-group-item active"><strong>click to join to the room</strong></li>
+                <li class="list-group-item"></li>
+              </ul>
           </div>
-          <br/>
-          <br/>
+          
 
-          <div id="createMyRom">
-            <!-- <a href="javascript:app.createMyRoom();">Create my own room</a> -->
+          <button id="createRoomBtn" type="button" class="btn btn-lg btn-danger createRoomCustom">
+            Create my own room
+          </button>
 
-            <button id="createRoomBtn" type="button" class="btn btn-lg btn-danger">Create my own room</button>
 
-          </div>
-          <div id="allConnectedUsers">
-              <strong>All users in main room:<br/></strong>
+          <div id="allConnectedUsers" class="containerLinks">
+              <p></p>
+              <ul class="list-group">
+                <li class="list-group-item active"><strong>All users in main room</strong></li>
+                <li class="list-group-item"></li>
+              </ul>
           </div>
 
       </div>
@@ -113,7 +120,6 @@
 
 
       <iframe id="gameContainer"></iframe>
-
 
       <div id="chatContainer">
 

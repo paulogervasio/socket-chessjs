@@ -36,7 +36,7 @@ class App{
       this.userName = 'myUsername';
       this.myUserId;
 
-      this.currentRoom = 'mainRoom';
+      this.currentRoomStrName = 'mainRoom';
       this.roomName = 'myRoomName';
 
       this.playerA;
@@ -57,10 +57,11 @@ class App{
 
       this.self = this;
 
-      this.chessBoardMoves = new ChessBoardMoves(this.currentRoom);
-      this.room = new Room(this.myUserId, this.currentRoom);
-
-      this.userRoom = new UserRoom(this.currentRoom, this);
+      this.chessBoardMoves = new ChessBoardMoves(this.currentRoomStrName);
+      
+      this.userRoom = new UserRoom(this.currentRoomStrName, this);
+      this.room = new Room(this.myUserId, this.currentRoomStrName, this.userRoom);
+      
 
     }
 
@@ -131,7 +132,7 @@ class App{
           console.log(_boardData);
             
 
-          this.currentRoom = 'room_' + _boardData.userId;
+          this.currentRoomStrName = 'room_' + _boardData.userId;
 
           //alert( _boardData.userId);
 
@@ -160,7 +161,7 @@ class App{
       $("#userIdLabel").text('My id is: [' + _list.userId + ']');
 
       Room.listAllAvailableRooms(roomList, clientList);
-      Room.listAllAvailableClients(roomList, clientList, _list);
+      Room.listAllAvailableClients(roomList, clientList, _list, this.userRoom);
      
     }     
 
@@ -238,7 +239,7 @@ class App{
     sendPiecePosition(_move){
       console.log('sendPiecePosition');
       console.log(_move);
-      _move.roomID = this.currentRoom;
+      _move.roomID = this.currentRoomStrName;
       this.socket.emit('sendPiecePosition', _move);
     }
 

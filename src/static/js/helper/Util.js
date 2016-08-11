@@ -12,7 +12,7 @@ class Util{
     */
 	static removeInvalidIdChars(_name){
 
-	  //console.log(_name);
+	  console.log(_name);
 
 	  _name = _name.replace('/','');
 	  _name = _name.replace('#','');

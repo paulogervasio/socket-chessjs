@@ -2,7 +2,7 @@
 
 class UserRoom{
     constructor(currentRoom, app){
-    	this.currentRoom = currentRoom;
+    	this.currentRoomStrName = currentRoom;
     	this.app = app;
     }
 
@@ -13,20 +13,22 @@ class UserRoom{
     */
 	addNewUser(_userData){
 
+	  console.log('addNewUser ------------------------');
 	  console.log(_userData);
-	  console.log(this.currentRoom);
+	  console.log(this.currentRoomStrName);
 
 	  var userRoom = _userData.roomId;
 	  var userId = _userData.userId;
 
 	  userId = Util.removeInvalidIdChars(userId);
 
-	  console.log(userRoom +'=='+ this.currentRoom);
+	  console.log(userRoom +'=='+ this.currentRoomStrName);
 
-	  var option = '<div id="'+ userId +'">' + userId + '</div>';
+	  //var option = '<div id="'+ userId +'">' + userId + '</div>';
+	  var option = '<li id="' + userId+ '" class="list-group-item">'+ userId + '</li>';
 	  
 	  if(userRoom == 'mainRoom'){
-	    $('#mainRoom').find("#allConnectedUsers").append(option);
+	    $('#mainRoom').find("#allConnectedUsers").find(".list-group").append(option);
 	  }else{
 	    console.log('add user ' + userId + ' to userbox');
 	    $('#userContainer').find("#usersBox").append(option);
@@ -51,20 +53,20 @@ class UserRoom{
 	  console.log(userId);
 	  console.log(roomId);
 
-	  if(this.currentRoom == 'mainRoom'){
+	  if(this.currentRoomStrName == 'mainRoom'){
 
 	    $("#mainRoom").find("#allConnectedUsers").find("#" + userId).remove();
 	    $("#mainRoom").find("#allConnectedRooms").find("#" + roomId).remove();
 
 	  }
 
-	  console.log(this.currentRoom + '==' + roomId);
-	  if(this.currentRoom == roomId){
+	  console.log(this.currentRoomStrName + '==' + roomId);
+	  if(this.currentRoomStrName == roomId){
 	    $('#userContainer').find("#usersBox").find(userId).remove();
 
 	  }
 	  // TODO - call this method
-	  this.app.verifyGamePositions(userId);
+	  //this.app.verifyGamePositions(userId);
 
 	}	 
 
