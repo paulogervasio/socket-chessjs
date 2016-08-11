@@ -27,11 +27,11 @@ class Room{
 
     static createRoomButtonLink(_roomData){
 
-    	var roomId = Util.removeInvalidIdChars(_roomData.roomId); // stripped
-    	var hrefLink = '<a href="javascript:app.joinRoom(\''+_roomData.roomId+'\')">'+roomId;
-    	var option = '<li id="' + roomId+ '" class="list-group-item">'+ hrefLink + '</li>';
+		var roomId = Util.removeInvalidIdChars(_roomData.roomId); // stripped
+		var hrefLink = '<a href="javascript:app.joinRoom(\''+_roomData.roomId+'\')">'+roomId;
+		var option = '<li id="' + roomId+ '" class="list-group-item">'+ hrefLink + '</li>';
 
-	    $("#mainRoom").find("#allConnectedRooms").find(".list-group").append(option);    	
+	    $("#mainRoom").find("#allConnectedRooms").find(".list-group").append(option);
     }
 
 
