@@ -5,16 +5,19 @@
 
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
 
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"> -->
+
+    <link href="http://getbootstrap.com.br/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="http://getbootstrap.com.br/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <!-- <script src="http://code.jquery.com/jquery-1.11.1.js"></script> -->
     
-    <script type="text/javascript" src="./static/js/script.js"></script>
     <script type="text/javascript" src="./static/js/helper/Util.js"></script>
     <script type="text/javascript" src="./static/js/UserRoom.js"></script>
     <script type="text/javascript" src="./static/js/ChessBoardMoves.js"></script>
@@ -59,68 +62,104 @@
             chatInitalized = true;
           }       
 
+
+          /// actions
+          $('#createRoomBtn').on('click', function (e) {
+              app.createMyRoom();
+          });  
+
+          /// actions
+          $('#exitRoom').on('click', function (e) {
+              App.exitRoom();
+          });                    
+
         });
+
 
 
     </script>
 
 
   </head>
-  <body>
+  <body role="document">
     
+    <div>
+      <div id="mainRoom">
+          <div id="mainRoomBanner" class="jumbotron">
+              <p>Main Room:</p>
+              <div id="userLabel">
+                <p id="userIdLabel">My id:</p>
+              </div>
+              <strong>All Connected rooms</strong>
+          </div>
 
-    <div id="mainRoom">
-        Main Room:<br/>
-        <div id="userLabel">
-          <p id="userIdLabel">My id:</p>
-        </div>
-        <strong>All Connected rooms</strong>
-        <br/>
-        <div id="allConnectedRooms">
-            click to join to the room:<br/>
-        </div>
-        <br/>
-        <br/>
+          <div id="allConnectedRooms" class="containerLinks">
+              <p></p>
+              <ul class="list-group">          
+                <li class="list-group-item active"><strong>click to join to the room</strong></li>
+                <li class="list-group-item"></li>
+              </ul>
+          </div>
+          
 
-        <div id="createMyRom">
-          <a href="javascript:app.createMyRoom();">Create my own room</a>
-        </div>
-        <div id="allConnectedUsers">
-            <strong>All users in main room:<br/></strong>
-        </div>
+          <button id="createRoomBtn" type="button" class="btn btn-lg btn-danger createRoomCustom">
+            Create my own room
+          </button>
 
-    </div>
+          <br/><br/>
+          <div id="allConnectedUsers" class="containerLinks">
+              <p></p>
+              <ul class="list-group">
+                <li class="list-group-item active"><strong>All users in main room</strong></li>
+                <li class="list-group-item"></li>
+              </ul>
+          </div>
 
-    <div id="chatCredentials">
-        <input id="name" autocomplete="off" />
-        <br/>
-        <a href="javascript:app.initApp();">Init</a>
-    </div>
+      </div>
 
-
-
-    <iframe id="gameContainer"></iframe>
-
-
-    <div id="chatContainer">
-
-      <div id="exitRoom">
-        <a href="javascript:App.exitRoom();">Exit Room</a>
+      <div id="chatCredentials">
+          <input id="name" autocomplete="off" />
+          <br/>
+          <a href="javascript:app.initApp();">Init</a>
       </div>
 
 
-      <ul id="messages"></ul>
-      <form id='formSender' action="">
-        <input id="inputMessageField" autocomplete="off" /><button>Send</button>
-      </form>
-    <div>
-    <div id="userContainer">
-      <p>myId:</p>
-      <p>connected users:</p>
-        <div id="usersBox">
-        </div>
-    </div>
 
+      <iframe id="gameContainer"></iframe>
+
+      <div id="chatContainer">
+
+        <button id="exitRoom" type="button" class="btn btn-lg btn-danger">Exit</button>
+        <p></p>
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Chat</h3>
+            </div>
+            <div class="panel-body">
+              <ul id="messages"></ul>
+            </div>
+
+          <div class='sendForm'>
+            <form id='formSender' action="">
+              <input id="inputMessageField" autocomplete="off" class="form-control" />
+              <p></p>
+              <button class="btn btn-lg btn-primary">Send</button>
+              <p></p>
+            </form>
+          </div>
+        </div>
+
+      <div>
+      <div id="userContainer">
+        <p>myId:</p>
+        <p>connected users:</p>
+          <div id="usersBox">
+          </div>
+      </div>
+
+    </div>
 
   </body>
 </html>

@@ -29,3 +29,16 @@
   height: 550px;
   background-color: rgb(120,120,120);      
 }
+
+.containerLinks{
+  width: 250px;
+  height: 100%;
+}
+
+.createRoomCustom{
+  width: 250px;
+}
+.sendForm{
+  width: 350px;
+  margin-left: 15px;
+}
