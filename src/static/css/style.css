@@ -38,3 +38,7 @@
 .createRoomCustom{
   width: 250px;
 }
+.sendForm{
+  width: 350px;
+  margin-left: 15px;
+}

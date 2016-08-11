@@ -144,8 +144,8 @@ class App{
         this.socket.on('receivePiecePosition', function(_piecePosition){
             console.log('receivePiecePosition')
             ChessBoardMoves.receivePiecePosition(_piecePosition);
-        });        
-
+        });
+        
         //$('#formSender').find("#m").focus();
     }
 
