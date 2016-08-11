@@ -14,6 +14,8 @@ class Util{
 
 	  console.log(_name);
 
+	  _name = _name == undefined?'':_name;
+
 	  _name = _name.replace('/','');
 	  _name = _name.replace('#','');
 
