@@ -194,6 +194,8 @@ class App{
       console.log(this.myUserId);
       console.log(_roomId);
 
+      this.currentRoomStrName = _roomId;
+
       this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
       
     }
@@ -259,13 +261,21 @@ class App{
       console.log('sendPiecePosition');
       console.log(_move);
       _move.roomID = this.currentRoomStrName;
+
+      /*
+      if(this.playerA){
+        _move.roomID = 'room_' + this.playerA;
+      }
+      */
       this.socket.emit('sendPiecePosition', _move);
+
     }
 
     createMyRoom(){
       console.log('createMyRoom');
       console.log(this.myUserId);
-      var _roomId = 'room_' + this.myUserId; 
+      var _roomId = 'room_' + this.myUserId;
+      this.currentRoomStrName = _roomId;
       this.socket.emit('createRoom', {roomId:_roomId, userId:this.myUserId});
 
     }
