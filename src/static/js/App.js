@@ -119,6 +119,14 @@ class App{
           self.userRoom.removeUser(_userData);
         });
 
+
+        this.socket.on('quitRoom', function(_userData){
+          console.log('quitRoom');
+          App.exitRoom();
+        });
+
+        
+
         this.socket.on('boardConfig', function(_boardData){
             //alert(_boardConfig.side);
 
@@ -223,10 +231,17 @@ class App{
       var playerA = this.playerA;
       var playerB = this.playerB;
 
+      console.log(userId);
+      console.log(playerA);
+      console.log(playerB);
+
+      /*
+      // (!playerA || !playerB  && ) || 
       if(userId == Util.removeInvalidIdChars(playerA) || userId == Util.removeInvalidIdChars(playerB)){
          alert('A player exited. The game has not enough players to continue and will be aborted.');
          App.exitRoom();
-      }  
+      }
+      */
 
     }
 
@@ -248,6 +263,7 @@ class App{
     }
 
     static exitRoom(){
+      //this.socket.emit('userExitingRoom', {roomId:_roomId, userId:this.myUserId});      
       location.reload();
     }
 }

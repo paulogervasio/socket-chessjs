@@ -85,6 +85,25 @@ method.configEvents = function (socket, roomManager) {
 
     socket.broadcast.emit('removedUser', {userId:socket.id,roomId:socket.room});
 
+    console.log('this.roomManager');
+    console.log(self.roomManager);
+    console.log(socket.room);
+    console.log(self.roomManager.allRooms[socket.room]);
+
+    if(self.roomManager && self.roomManager.allRooms[socket.room]){
+
+      console.log('He!');
+
+      var playerA = self.roomManager.allRooms[socket.room].playerA;
+      var playerB = self.roomManager.allRooms[socket.room].playerB;
+
+
+      if(socket.id == playerA || socket.id == playerB.id){
+        console.log('GAME CANCELLED - REMOVE THIS ROOM NOW!');
+        socket.broadcast.to(socket.room).emit('quitRoom', '');
+      }
+    }
+
     //allUsers.splice(allUsers.indexOf(socket), 1);
 
   });

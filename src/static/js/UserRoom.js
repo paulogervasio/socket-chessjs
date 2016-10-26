@@ -52,6 +52,8 @@ class UserRoom{
 
 	  console.log(userId);
 	  console.log(roomId);
+	  console.log(this.roomName);
+	  
 
 	  if(this.currentRoomStrName == 'mainRoom'){
 
@@ -66,7 +68,7 @@ class UserRoom{
 
 	  }
 	  // TODO - call this method
-	  this.app.verifyGamePositions(userId);
+	  //this.app.verifyGamePositions(userId);
 
 	}	 
 
