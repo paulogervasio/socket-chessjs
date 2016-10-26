@@ -50,7 +50,7 @@ method.defineBoardSeats = function (_socket, _roomId, _flagRoom, _allRooms) {
 		// joinRoom
 		if(playerB == null){
 			// player B joined in room
-			_allRooms[socketRoomId].playerB=_socket;
+			_allRooms[socketRoomId].playerB=_socket.id;
 			_socket.emit('boardConfig', {userId:_socket.id, roomId:socketRoomId, side: 'B'});
 		}else{
 			// GUESTS

@@ -189,11 +189,16 @@ class App{
 
 
     joinRoom(_roomId){
-      //alert(myUserId + '||' +_roomId);
+      console.log(this.socket);
 
       console.log(this.myUserId);
       console.log(_roomId);
-      this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
+
+      if(_roomId == 'room_kXU7_pH8mtYouJRKAAAA'){
+        this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
+      } else{
+        this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
+      }
       
     }
 

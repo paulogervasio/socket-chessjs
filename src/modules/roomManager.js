@@ -69,6 +69,9 @@ method.changeRoom = function (_userData) {
     var roomId =  _userData.roomId;
 
     console.log(roomId);
+    console.log(this.allRooms);
+
+
 
     var playerA = this.allRooms[roomId].playerA;
     var playerB = this.allRooms[roomId].playerB;
