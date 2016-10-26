@@ -10,13 +10,17 @@
     <link href="http://getbootstrap.com.br/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
     <link href="http://getbootstrap.com.br/dist/css/bootstrap.min.css" rel="stylesheet" />
 
+
+	<link href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+
+
+
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <!-- <script src="http://code.jquery.com/jquery-1.11.1.js"></script> -->
     
     <script type="text/javascript" src="./static/js/helper/Util.js"></script>
     <script type="text/javascript" src="./static/js/UserRoom.js"></script>
@@ -82,38 +86,49 @@
 
   </head>
   <body role="document">
+
     
     <div>
       <div id="mainRoom">
+
+        <!-- <ROOM INFO> -->
+		<div class="container-fluid">			    
+
+
           <div id="mainRoomBanner" class="jumbotron">
               <p>Main Room:</p>
               <div id="userLabel">
                 <p id="userIdLabel">My id:</p>
               </div>
-              <strong>All Connected rooms</strong>
+<!--               <strong>All Connected rooms</strong> -->
           </div>
 
-          <div id="allConnectedRooms" class="containerLinks">
-              <p></p>
-              <ul class="list-group">          
-                <li class="list-group-item active"><strong>click to join to the room</strong></li>
-                <li class="list-group-item"></li>
-              </ul>
-          </div>
-          
+			<hr/>
+			<div id="allConnectedRooms">
+			  <p></p>
+			  <ul class="list-group">          
+			    <li class="list-group-item active"><strong>click to join to the room</strong></li>
+			  </ul>
+			</div>
 
-          <button id="createRoomBtn" type="button" class="btn btn-lg btn-danger createRoomCustom">
-            Create my own room
-          </button>
 
-          <br/><br/>
-          <div id="allConnectedUsers" class="containerLinks">
-              <p></p>
-              <ul class="list-group">
-                <li class="list-group-item active"><strong>All users in main room</strong></li>
-                <li class="list-group-item"></li>
-              </ul>
-          </div>
+			<button id="createRoomBtn" type="button" class="btn-lg btn-danger btn-responsive">
+				Create your room
+			</button>
+
+			<br/><br/>
+			<div id="allConnectedUsers" >
+			  <p></p>
+			  <ul class="list-group">
+			    <li class="list-group-item active"><strong>All users in main room</strong></li>
+			    <li class="list-group-item"></li>
+			  </ul>
+			</div>
+			
+			<hr/>
+
+		</div>
+		<!-- <ROOM INFO> -->
 
       </div>
 
