@@ -194,11 +194,7 @@ class App{
       console.log(this.myUserId);
       console.log(_roomId);
 
-      if(_roomId == 'room_kXU7_pH8mtYouJRKAAAA'){
-        this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
-      } else{
-        this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
-      }
+      this.socket.emit('changeRoom', {userId:this.myUserId, roomId:_roomId});
       
     }
 
@@ -206,6 +202,8 @@ class App{
 
       console.log('userJoinedIRoom');
       console.log(_userData);
+
+
 
       this.playerA = _userData.roomUsersData.playerA;
       this.playerB = _userData.roomUsersData.playerB;
@@ -216,9 +214,14 @@ class App{
       var userId = Util.removeInvalidIdChars(_userData.userId);
       $(mainRoom).find(allConnectedUsers).find("#" + userId).remove(); 
 
+
+
+
+      this.userRoom.addNewUser(_userData);
+
       /*// TODO - add user to joined room list
       var option = '<div id="'+ userId +'">' + userId + '</div>';
-      $('#userContainer').find("#usersBox").append(option); 
+      //$('#userContainer').find("#usersBox").append(option); 
       */
 
     }

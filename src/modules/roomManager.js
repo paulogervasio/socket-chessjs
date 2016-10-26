@@ -75,7 +75,14 @@ method.changeRoom = function (_userData) {
 
     var playerA = this.allRooms[roomId].playerA;
     var playerB = this.allRooms[roomId].playerB;
-    var guests = null;
+    var guests = this.allRooms[roomId].guests;
+
+    if(playerA && playerB){
+      if(!guests){
+        guests = [];
+      }
+      guests.push(userId);     
+    }
 
     playerB == null? playerB = userId: this.allRooms[roomId].playerB;
 

@@ -6,8 +6,7 @@
 #chatContainer{
   display: none;
   position: absolute;
-  margin-left: 650px;
-  height: 350px;
+  margin-left: 450px;
 }
 
 #chatContainer #messages{
@@ -30,9 +29,10 @@
 
 #gameContainer{
   position: absolute;
-  width:600px;
-  height: 550px;
-  background-color: rgb(120,120,120);      
+  width:420px;
+  height:620px;
+  border:none;
+  background-color: rgb(235,235,235);      
 }
 
 .containerLinks{

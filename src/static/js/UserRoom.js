@@ -9,7 +9,7 @@ class UserRoom{
     /**
 	* Add new user both main room and game rooms
 	*
-	*  TODO - remove div string names. Replace it for a parameter like _AllConnectedUsersDiv and _userBoxDiv
+	*  TODO - remove div string names. Replace using a parameter like _AllConnectedUsersDiv and _userBoxDiv
     */
 	addNewUser(_userData){
 
